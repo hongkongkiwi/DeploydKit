@@ -522,6 +522,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DeploydKit/DeploydKit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = CONFIGURATION_$CONFIGURATION;
+				HEADER_SEARCH_PATHS = (
+					../AFNetworking,
+					AFNetworking,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = DeploydKit;
 				PUBLIC_HEADERS_FOLDER_PATH = Headers;
@@ -539,6 +543,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DeploydKit/DeploydKit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = CONFIGURATION_$CONFIGURATION;
+				HEADER_SEARCH_PATHS = (
+					../AFNetworking,
+					AFNetworking,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = DeploydKit;
 				PUBLIC_HEADERS_FOLDER_PATH = Headers;

@@ -11,6 +11,9 @@
 //
 
 #import "NSURLConnection+Timeout.h"
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import "AFNetworking.h"
 
 @implementation NSURLConnection (Timeout)
 
@@ -44,8 +47,14 @@
   __block NSHTTPURLResponse *internalResponse = nil;
   __block NSError *internalErr = nil;
   __block dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-  
+#ifndef AFNetworking_NOT_AVAILABLE
+	AFHTTPRequestOperation* operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+	[operation setFailureCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+	[operation setSuccessCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+#endif
+	
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+#ifdef AFNetworking_NOT_AVAILABLE
     data = [self sendSynchronousRequest:request returningResponse:&internalResponse error:&internalErr];
     
     // Use the locking queue
@@ -55,6 +64,31 @@
         dispatch_semaphore_signal(sema);
       }
     });
+#else // AFNetworking_NOT_AVAILABLE
+	  [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+		  internalResponse = operation.response;
+		  internalErr = nil;
+		  data = responseObject;
+		  // Use the locking queue
+		  dispatch_sync(lockQueue, ^{
+			  if (sema != NULL) {
+				  finished = YES;
+				  dispatch_semaphore_signal(sema);
+			  }
+		  });
+	  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		  internalResponse = operation.response;
+		  internalErr = error;
+		  // Use the locking queue
+		  dispatch_sync(lockQueue, ^{
+			  if (sema != NULL) {
+				  finished = YES;
+				  dispatch_semaphore_signal(sema);
+			  }
+		  });
+	  }];
+	  [operation start];
+#endif // AFNetworking_NOT_AVAILABLE
   });
   dispatch_semaphore_wait(sema, popTime);
   
@@ -79,7 +113,10 @@
     }
     return data;
   }
-  
+#ifndef AFNetworking_NOT_AVAILABLE
+	[operation cancel];
+#endif
+	
   // If the request timed out, return an error
   if (error != NULL) {
     NSDictionary *infoDict = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Request timed out", nil)};

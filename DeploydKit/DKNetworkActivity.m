@@ -12,7 +12,9 @@
 
 #import "DKNetworkActivity.h"
 #import <libkern/OSAtomic.h>
-
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import "AFNetworking.h"
 
 @implementation DKNetworkActivity
 
@@ -23,11 +25,16 @@ static int32_t kDKNetworkActivityCount = 0;
 }
 
 + (void)begin {
+#ifdef AFNetworking_NOT_AVAILABLE
   OSAtomicIncrement32(&kDKNetworkActivityCount);
   [self updateNetworkActivityStatus];
+#else // AFNetworking_NOT_AVAILABLE
+	[[AFNetworkActivityIndicatorManager sharedManager] incrementActivityCount];
+#endif // AFNetworking_NOT_AVAILABLE
 }
 
 + (void)end {
+#ifdef AFNetworking_NOT_AVAILABLE
   OSAtomicDecrement32(&kDKNetworkActivityCount);
 
   // Delay update a little to avoid flickering
@@ -36,6 +43,9 @@ static int32_t kDKNetworkActivityCount = 0;
   dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
     [self updateNetworkActivityStatus];
   });
+#else // AFNetworking_NOT_AVAILABLE
+	[[AFNetworkActivityIndicatorManager sharedManager] decrementActivityCount];
+#endif // AFNetworking_NOT_AVAILABLE
 }
 
 + (NSInteger)activityCount {
