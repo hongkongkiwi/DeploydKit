@@ -275,14 +275,14 @@
 }
 
 - (BOOL)isEqual:(id)object {
-  if ([object isKindOfClass:isa]) {
+  if ([object isKindOfClass:[self class]]) {
     return [[(DKEntity *)object entityId] isEqualToString:self.entityId];
   }
   return NO;
 }
 
 - (NSString *)description {
-  return [NSString stringWithFormat:@"<%@: %p %@> %@", NSStringFromClass(isa), self, self.entityId, self.resultMap];
+  return [NSString stringWithFormat:@"<%@: %p %@> %@", NSStringFromClass([self class]), self, self.entityId, self.resultMap];
 }
 
 - (BOOL)login:(NSError **)error username:(NSString*)username password:(NSString*)password{

@@ -59,7 +59,7 @@
 
 - (id)sendRequestWithObject:(id)JSONObject method:(NSString *)apiMethod entity:(NSString *)entityName error:(NSError **)error {
   // Wrap special objects before encoding JSON
-  JSONObject = [isa wrapSpecialObjectsInJSON:JSONObject];
+  JSONObject = [[self class] wrapSpecialObjectsInJSON:JSONObject];
     
   // Encode JSON
   NSError *JSONError = nil;
@@ -115,7 +115,7 @@
       [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
       
       // Log request
-      [isa logData:bodyData isOut:YES isCached:NO];
+      [[self class] logData:bodyData isOut:YES isCached:NO];
   }
   else{
       // Log
@@ -172,7 +172,7 @@
      [[EGOCache globalCache] setData:result forKey:self.keyCache withTimeoutInterval:self.maxCacheAge];
   }
     
-  return [isa parseResponse:response withData:result error:error isCached:loadFromCache];
+  return [[self class] parseResponse:response withData:result error:error isCached:loadFromCache];
 }
 
 - (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error {

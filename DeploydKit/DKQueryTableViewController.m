@@ -332,7 +332,7 @@
   CGRect bounds = self.bounds;
   CGSize textSize = [text sizeWithFont:font
                               forWidth:CGRectGetWidth(bounds)
-                         lineBreakMode:UILineBreakModeTailTruncation];
+                         lineBreakMode:NSLineBreakByTruncatingTail];
   CGSize spinnerSize = self.activityAccessoryView.frame.size;
   CGFloat padding = 10.0;
   

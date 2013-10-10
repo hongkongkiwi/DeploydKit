@@ -128,7 +128,7 @@
 }
 
 - (BOOL)delete:(NSError **)error {
-  return [isa deleteFile:self.name error:error];
+  return [[self class] deleteFile:self.name error:error];
 }
 
 - (void)deleteInBackgroundWithBlock:(void (^)(BOOL success, NSError *error))block {
