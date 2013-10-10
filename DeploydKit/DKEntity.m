@@ -108,7 +108,11 @@
 
 - (void)saveInBackgroundWithBlock:(void (^)(DKEntity *entity, NSError *error))block {
   block = [block copy];
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+	dispatch_queue_t q = [NSThread isMainThread] ? dispatch_get_main_queue() : dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+#else
   dispatch_queue_t q = dispatch_get_current_queue();
+#endif
   dispatch_async([DKManager queue], ^{
     NSError *error = nil;
     [self save:&error];
@@ -156,7 +160,11 @@
 
 - (void)refreshInBackgroundWithBlock:(void (^)(DKEntity *entity, NSError *error))block {
   block = [block copy];
-  dispatch_queue_t q = dispatch_get_current_queue();
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+	dispatch_queue_t q = [NSThread isMainThread] ? dispatch_get_main_queue() : dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+#else
+	dispatch_queue_t q = dispatch_get_current_queue();
+#endif
   dispatch_async([DKManager queue], ^{
     NSError *error = nil;
     [self refresh:&error];
@@ -209,7 +217,11 @@
 
 - (void)deleteInBackgroundWithBlock:(void (^)(DKEntity *entity, NSError *error))block {
   block = [block copy];
-  dispatch_queue_t q = dispatch_get_current_queue();
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+	dispatch_queue_t q = [NSThread isMainThread] ? dispatch_get_main_queue() : dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+#else
+	dispatch_queue_t q = dispatch_get_current_queue();
+#endif
   dispatch_async([DKManager queue], ^{
     NSError *error = nil;
     [self delete:&error];

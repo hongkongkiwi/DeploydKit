@@ -56,7 +56,7 @@
 }
 
 - (void)processQueryResults:(NSArray *)results error:(NSError *)error callback:(void (^)(NSError *error))callback {
-  NSAssert(dispatch_get_current_queue() == dispatch_get_main_queue(), @"query results not processed on main queue");
+  NSAssert([NSThread isMainThread], @"query results not processed on main queue");
   
   if (results != nil && ![results isKindOfClass:[NSArray class]]) {
     [NSException raise:NSInternalInconsistencyException
@@ -91,7 +91,11 @@
   }
   
   // Post process results
-  dispatch_queue_t q = dispatch_get_current_queue();
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+	dispatch_queue_t q = [NSThread isMainThread] ? dispatch_get_main_queue() : dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+#else
+	dispatch_queue_t q = dispatch_get_current_queue();
+#endif
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     
     [self postProcessResults];

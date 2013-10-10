@@ -293,7 +293,11 @@
 }
 
 - (void)findAllInBackgroundWithBlock:(void (^)(NSArray *results, NSError *error))block {
-  dispatch_queue_t q = dispatch_get_current_queue();
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+	dispatch_queue_t q = [NSThread isMainThread] ? dispatch_get_main_queue() : dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+#else
+	dispatch_queue_t q = dispatch_get_current_queue();
+#endif
   dispatch_async([DKManager queue], ^{
     NSError *error = nil;
     NSArray *entities = [self findAll:&error];
@@ -316,7 +320,11 @@
 }
 
 - (void)countAllInBackgroundWithBlock:(void (^)(NSUInteger count, NSError *error))block {
-  dispatch_queue_t q = dispatch_get_current_queue();
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+	dispatch_queue_t q = [NSThread isMainThread] ? dispatch_get_main_queue() : dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+#else
+	dispatch_queue_t q = dispatch_get_current_queue();
+#endif
   dispatch_async([DKManager queue], ^{
     NSError *error = nil;
     NSUInteger count = [self countAll:&error];

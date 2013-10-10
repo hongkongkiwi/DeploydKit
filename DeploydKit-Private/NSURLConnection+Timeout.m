@@ -94,7 +94,9 @@
   
   // Release the semaphore inside the locking queue
   dispatch_sync(lockQueue, ^{
-    dispatch_release(sema);
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
+	dispatch_release(sema);
+#endif
     sema = NULL;
   });
   
