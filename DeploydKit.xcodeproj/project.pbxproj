@@ -23,7 +23,6 @@
 
 /* Begin PBXBuildFile section */
 		DC03846114F68EA1000DADD6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC03846014F68EA1000DADD6 /* Foundation.framework */; };
-		DC03846F14F68EA1000DADD6 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC03846E14F68EA1000DADD6 /* SenTestingKit.framework */; };
 		DC03847214F68EA1000DADD6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC03846014F68EA1000DADD6 /* Foundation.framework */; };
 		DC03847514F68EA1000DADD6 /* libDeploydKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC03845D14F68EA1000DADD6 /* libDeploydKit.a */; };
 		DC162311150BBA4900F12198 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC162310150BBA4900F12198 /* CoreGraphics.framework */; };
@@ -89,8 +88,7 @@
 /* Begin PBXFileReference section */
 		DC03845D14F68EA1000DADD6 /* libDeploydKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDeploydKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC03846014F68EA1000DADD6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		DC03846D14F68EA1000DADD6 /* DeploydKitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeploydKitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DC03846E14F68EA1000DADD6 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		DC03846D14F68EA1000DADD6 /* DeploydKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeploydKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC162310150BBA4900F12198 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DC830522150513A200D6AB1C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FF12E456166E9D5700BF63CE /* DKChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DKChannel.h; sourceTree = "<group>"; };
@@ -152,7 +150,6 @@
 			files = (
 				DC16231A150BBC8A00F12198 /* CoreGraphics.framework in Frameworks */,
 				DC162319150BBC7E00F12198 /* UIKit.framework in Frameworks */,
-				DC03846F14F68EA1000DADD6 /* SenTestingKit.framework in Frameworks */,
 				DC03847214F68EA1000DADD6 /* Foundation.framework in Frameworks */,
 				DC03847514F68EA1000DADD6 /* libDeploydKit.a in Frameworks */,
 			);
@@ -176,7 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				DC03845D14F68EA1000DADD6 /* libDeploydKit.a */,
-				DC03846D14F68EA1000DADD6 /* DeploydKitTests.octest */,
+				DC03846D14F68EA1000DADD6 /* DeploydKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -187,7 +184,6 @@
 				DC162310150BBA4900F12198 /* CoreGraphics.framework */,
 				DC830522150513A200D6AB1C /* UIKit.framework */,
 				DC03846014F68EA1000DADD6 /* Foundation.framework */,
-				DC03846E14F68EA1000DADD6 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -318,8 +314,8 @@
 			);
 			name = DeploydKitTests;
 			productName = DataKitTests;
-			productReference = DC03846D14F68EA1000DADD6 /* DeploydKitTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = DC03846D14F68EA1000DADD6 /* DeploydKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -327,6 +323,7 @@
 		DC03845414F68EA1000DADD6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = chocomoko.com;
 			};
@@ -569,7 +566,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DeploydKit/DeploydKit-Prefix.pch";
@@ -579,7 +576,6 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = DeploydKitTests;
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -588,7 +584,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DeploydKit/DeploydKit-Prefix.pch";
@@ -598,7 +594,6 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = DeploydKitTests;
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};

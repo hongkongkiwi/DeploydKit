@@ -30,14 +30,14 @@
   [userObject setObject:@"user_1" forKey:kDKEntityUserName];
   [userObject setObject:@"password_1" forKey:kDKEntityUserPassword];
   success = [userObject save:&error];
-  STAssertNil(error, @"first insert should not return error, did return %@", error);
-  STAssertTrue(success, @"first insert should have been successful (return YES)");
+  XCTAssertNil(error, @"first insert should not return error, did return %@", error);
+  XCTAssertTrue(success, @"first insert should have been successful (return YES)");
     
   //Login user
   error = nil;
   success = [userObject login:&error username:@"user_1" password:@"password_1"];
-  STAssertNil(error, @"login should not return error, did return %@", error);
-  STAssertTrue(success, @"login should have been successful (return YES)");
+  XCTAssertNil(error, @"login should not return error, did return %@", error);
+  XCTAssertTrue(success, @"login should have been successful (return YES)");
 }
 
 -(void) deleteDefaultUser{
@@ -47,14 +47,14 @@
   //Logged user
   DKEntity *userObject = [DKEntity entityWithName:kDKEntityTestsUser];
   success = [userObject loggedUser:&error];
-  STAssertNil(error, @"user logged should not return error, did return %@", error);
-  STAssertTrue(success, @"user logged should be logged (return YES)");
+  XCTAssertNil(error, @"user logged should not return error, did return %@", error);
+  XCTAssertTrue(success, @"user logged should be logged (return YES)");
     
   //Delete user
   error = nil;
   success = [userObject delete:&error];
-  STAssertNil(error, @"delete should not return error, did return %@", error);
-  STAssertTrue(success, @"delete should have been successful (return YES)");
+  XCTAssertNil(error, @"delete should not return error, did return %@", error);
+  XCTAssertTrue(success, @"delete should have been successful (return YES)");
 }
 
 - (NSData *)generateRandomDataWithLength:(NSUInteger)numBytes {
@@ -77,7 +77,7 @@
   NSData *data = [self generateRandomDataWithLength:len];
   NSData *data2 = [self generateRandomDataWithLength:len];
   
-  STAssertFalse([data isEqualToData:data2], nil);
+  XCTAssertFalse([data isEqualToData:data2]);
 }
 
 - (void)testFileIntegrityAndLoad {
@@ -91,39 +91,39 @@
   //Save file
   error = nil;    
   DKFile *file = [DKFile fileWithName:nil data:data]; //filename ignored, generated with uuid
-  STAssertTrue(file.isVolatile, nil);
-  STAssertEqualObjects(data, file.data, nil);
+  XCTAssertTrue(file.isVolatile);
+  XCTAssertEqualObjects(data, file.data);
   success = [file save:&error];
-  STAssertTrue(success, nil);
-  STAssertNil(error, error.localizedDescription);
-  STAssertFalse(file.isVolatile, nil);
-  STAssertEqualObjects(data, file.data, nil);
+  XCTAssertTrue(success);
+  XCTAssertNil(error, error.localizedDescription);
+  XCTAssertFalse(file.isVolatile);
+  XCTAssertEqualObjects(data, file.data);
   NSString *fileName = file.name;
     
   //Check exists (YES)
   error = nil;
   BOOL exists = [DKFile fileExists:fileName error:&error];
-  STAssertNil(error, error.localizedDescription);
-  STAssertTrue(exists, nil);
+  XCTAssertNil(error, error.localizedDescription);
+  XCTAssertTrue(exists);
   
   //Load file
   error = nil;
   DKFile *file2 = [DKFile fileWithName:fileName];
   NSData *data2 = [file2 loadData:&error];
-  STAssertNil(error, error.localizedDescription);
-  STAssertTrue([data isEqualToData:data2], nil);
+  XCTAssertNil(error, error.localizedDescription);
+  XCTAssertTrue([data isEqualToData:data2]);
     
   //Delete file
   error = nil;
   success = [file2 delete];
-  STAssertTrue(success, nil);
-  STAssertNil(error, error.localizedDescription);
+  XCTAssertTrue(success);
+  XCTAssertNil(error, error.localizedDescription);
     
   //Check exists (NO)
   error = nil;
   exists = [DKFile fileExists:fileName error:&error];
-  STAssertNil(error, error.localizedDescription);
-  STAssertFalse(exists, nil);
+  XCTAssertNil(error, error.localizedDescription);
+  XCTAssertFalse(exists);
 
   [self deleteDefaultUser];
 }

@@ -31,14 +31,14 @@
     [userObject setObject:@"user_1" forKey:kDKEntityUserName];
     [userObject setObject:@"password_1" forKey:kDKEntityUserPassword];
     success = [userObject save:&error];
-    STAssertNil(error, @"first insert should not return error, did return %@", error);
-    STAssertTrue(success, @"first insert should have been successful (return YES)");
+    XCTAssertNil(error, @"first insert should not return error, did return %@", error);
+    XCTAssertTrue(success, @"first insert should have been successful (return YES)");
     
     //Login user
     error = nil;
     success = [userObject login:&error username:@"user_1" password:@"password_1"];
-    STAssertNil(error, @"login should not return error, did return %@", error);
-    STAssertTrue(success, @"login should have been successful (return YES)");
+    XCTAssertNil(error, @"login should not return error, did return %@", error);
+    XCTAssertTrue(success, @"login should have been successful (return YES)");
 }
 
 -(void) deleteDefaultUser{
@@ -48,14 +48,14 @@
     //Logged user
     DKEntity *userObject = [DKEntity entityWithName:kDKEntityTestsUser];
     success = [userObject loggedUser:&error];
-    STAssertNil(error, @"user logged should not return error, did return %@", error);
-    STAssertTrue(success, @"user logged should be logged (return YES)");
+    XCTAssertNil(error, @"user logged should not return error, did return %@", error);
+    XCTAssertTrue(success, @"user logged should be logged (return YES)");
     
     //Delete user
     error = nil;
     success = [userObject delete:&error];
-    STAssertNil(error, @"delete should not return error, did return %@", error);
-    STAssertTrue(success, @"delete should have been successful (return YES)");
+    XCTAssertNil(error, @"delete should not return error, did return %@", error);
+    XCTAssertTrue(success, @"delete should have been successful (return YES)");
 }
 
 - (void)testUserAuth {
@@ -67,32 +67,32 @@
   //Logged user
   DKEntity *userObject = [DKEntity entityWithName:kDKEntityTestsUser];
   success = [userObject loggedUser:&error];
-  STAssertNil(error, @"user logged should not return error, did return %@", error);        
-  STAssertTrue(success, @"user logged should be logged (return YES)");
+  XCTAssertNil(error, @"user logged should not return error, did return %@", error);        
+  XCTAssertTrue(success, @"user logged should be logged (return YES)");
     
   //Log out user
   error = nil;
   success = [userObject logout:&error];
-  STAssertNil(error, @"logout should not return error, did return %@", error);    
-  STAssertTrue(success, @"logout should have been successful (return YES)");
+  XCTAssertNil(error, @"logout should not return error, did return %@", error);    
+  XCTAssertTrue(success, @"logout should have been successful (return YES)");
     
   //Logged user
   error = nil;
   success = [userObject loggedUser:&error];
-  STAssertNotNil(error, @"user logged should return error, did return %@", error);
-  STAssertFalse(success, @"user logged shouldn't be logged (return NO)");  
+  XCTAssertNotNil(error, @"user logged should return error, did return %@", error);
+  XCTAssertFalse(success, @"user logged shouldn't be logged (return NO)");  
     
   //Delete user
   error = nil;
   success = [userObject delete:&error];
-  STAssertNotNil(error, @"delete not logged should return error, did return %@", error);
-  STAssertFalse(success, @"delete shouldn't have been successful (return NO)");
+  XCTAssertNotNil(error, @"delete not logged should return error, did return %@", error);
+  XCTAssertFalse(success, @"delete shouldn't have been successful (return NO)");
 
   //Login user
   error = nil;
   success = [userObject login:&error username:@"user_1" password:@"password_1"];
-  STAssertNil(error, @"login should not return error, did return %@", error);        
-  STAssertTrue(success, @"login should have been successful (return YES)");
+  XCTAssertNil(error, @"login should not return error, did return %@", error);        
+  XCTAssertTrue(success, @"login should have been successful (return YES)");
     
   [self deleteDefaultUser];
 }
@@ -107,24 +107,24 @@
   DKEntity *postObject = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject setObject:@"My first post" forKey:kDKEntityTestsPostText];
   success = [postObject save:&error];
-  STAssertNil(error, @"post insert should not return error, did return %@", error);
-  STAssertTrue(success, @"post insert should have been successful (return YES)");
+  XCTAssertNil(error, @"post insert should not return error, did return %@", error);
+  XCTAssertTrue(success, @"post insert should have been successful (return YES)");
   
   NSUInteger mapCount = postObject.resultMap.count;
-  STAssertEquals(mapCount, (NSUInteger)4, @"result map should have 4 elements, has %i", mapCount);
+  XCTAssertEqual(mapCount, (NSUInteger)4, @"result map should have 4 elements, has %i", mapCount);
   
   NSString *userId = [postObject objectForKey:kDKEntityIDField];
   NSString *text = [postObject objectForKey:kDKEntityTestsPostText];
 
-  STAssertTrue(userId.length > 0, @"result map should have field 'id'");
-  STAssertEqualObjects(text, @"My first post", @"result map should have name field set to 'My first post', is '%@'", text);
+  XCTAssertTrue(userId.length > 0, @"result map should have field 'id'");
+  XCTAssertEqualObjects(text, @"My first post", @"result map should have name field set to 'My first post', is '%@'", text);
   
   NSTimeInterval createdAt = postObject.createdAt.timeIntervalSince1970;
   NSTimeInterval createdNow = [[NSDate date] timeIntervalSince1970];
   NSString *creatorId = [postObject objectForKey:kDKEntityIDField];
     
-  STAssertEqualsWithAccuracy(createdAt, createdNow, 1.0, nil);
-  STAssertEqualObjects(userId, creatorId, @"result map should have the same creatorIs as is', is '%@'", creatorId);
+  XCTAssertEqualWithAccuracy(createdAt, createdNow, 1.0);
+  XCTAssertEqualObjects(userId, creatorId, @"result map should have the same creatorIs as is', is '%@'", creatorId);
     
   //Update post
   error = nil;    
@@ -132,22 +132,22 @@
   NSArray * sharedArray = @[@"user_2",@"user_3"];
   [postObject setObject:sharedArray forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
-  STAssertNil(error, @"update should not return error, did return %@", error);
-  STAssertTrue(success, @"update should have been successful (return YES)");
+  XCTAssertNil(error, @"update should not return error, did return %@", error);
+  XCTAssertTrue(success, @"update should have been successful (return YES)");
   
   mapCount = postObject.resultMap.count;
-  STAssertEquals(mapCount, (NSUInteger)4, @"result map should have 6 elements, has %i", mapCount);
+  XCTAssertEqual(mapCount, (NSUInteger)4, @"result map should have 6 elements, has %i", mapCount);
   
   userId = [postObject objectForKey:kDKEntityIDField];
   text = [postObject objectForKey:kDKEntityTestsPostText];
   sharedArray = [postObject objectForKey:kDKEntityTestsPostSharedTo];
     
-  STAssertTrue(userId.length > 0, @"result map should have field 'id'");
-  STAssertEqualObjects(text, @"My first post udpated", @"result map should have name field set to 'My first post udpated', is '%@'", text);
+  XCTAssertTrue(userId.length > 0, @"result map should have field 'id'");
+  XCTAssertEqualObjects(text, @"My first post udpated", @"result map should have name field set to 'My first post udpated', is '%@'", text);
    
   NSTimeInterval updatedAt = postObject.updatedAt.timeIntervalSince1970;
   NSTimeInterval updatedNow = [[NSDate date] timeIntervalSince1970];
-  STAssertEqualsWithAccuracy(updatedAt, updatedNow, 1.0, nil);
+  XCTAssertEqualWithAccuracy(updatedAt, updatedNow, 1.0);
 
   //Refresh post
   error = nil;
@@ -155,18 +155,18 @@
   [postObject setObject:@"My post unsaved" forKey:kDKEntityTestsPostText];    
 
   success = [postObject refresh:&error];
-  STAssertNil(error, @"refresh should not return error, did return %@", error);
-  STAssertTrue(success, @"refresh should have been successful (return YES)");
+  XCTAssertNil(error, @"refresh should not return error, did return %@", error);
+  XCTAssertTrue(success, @"refresh should have been successful (return YES)");
   
   mapCount = postObject.resultMap.count;
-  STAssertEquals(mapCount, (NSUInteger)6, @"result map should have 5 elements, has %i", mapCount);
-  STAssertEqualObjects([postObject objectForKey:kDKEntityTestsPostText], refreshField, @"result map should have the same creatorIs as is', is '%@'", [postObject objectForKey:kDKEntityTestsPostText]);
+  XCTAssertEqual(mapCount, (NSUInteger)6, @"result map should have 5 elements, has %i", mapCount);
+  XCTAssertEqualObjects([postObject objectForKey:kDKEntityTestsPostText], refreshField, @"result map should have the same creatorIs as is', is '%@'", [postObject objectForKey:kDKEntityTestsPostText]);
 
   //Delete post
   error = nil;
   success = [postObject delete:&error];
-  STAssertNil(error, @"delete post should not return error, did return %@", error);
-  STAssertTrue(success, @"delete post should have been successful (return YES)");
+  XCTAssertNil(error, @"delete post should not return error, did return %@", error);
+  XCTAssertTrue(success, @"delete post should have been successful (return YES)");
     
   [self deleteDefaultUser];
 }
@@ -182,21 +182,21 @@
   [postObject setObject:@"My first post" forKey:kDKEntityTestsPostText];
   [postObject setObject:@3 forKey:kDKEntityTestsPostVisits];
   success = [postObject save:&error];
-  STAssertNil(error, error.description);
-  STAssertTrue(success, nil);
-  STAssertEquals([[postObject objectForKey:kDKEntityTestsPostVisits] integerValue], (NSInteger)3, nil);
+  XCTAssertNil(error, error.description);
+  XCTAssertTrue(success);
+  XCTAssertEqual([[postObject objectForKey:kDKEntityTestsPostVisits] integerValue], (NSInteger)3);
   
   //Increment
   error = nil; 
   [postObject incrementKey:kDKEntityTestsPostVisits byAmount:@2];
   success = [postObject save:&error];
-  STAssertEquals([[postObject objectForKey:kDKEntityTestsPostVisits] integerValue], (NSInteger)5, nil);
+  XCTAssertEqual([[postObject objectForKey:kDKEntityTestsPostVisits] integerValue], (NSInteger)5);
     
   //Delete post
   error = nil;
   success = [postObject delete:&error];
-  STAssertNil(error, @"delete post should not return error, did return %@", error);
-  STAssertTrue(success, @"delete post should have been successful (return YES)");
+  XCTAssertNil(error, @"delete post should not return error, did return %@", error);
+  XCTAssertTrue(success, @"delete post should have been successful (return YES)");
     
   [self deleteDefaultUser];    
 }
@@ -211,34 +211,34 @@
   DKEntity *postObject = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject setObject:@[@"user_2"] forKey:kDKEntityTestsPostSharedTo];  
   success = [postObject save:&error];
-  STAssertTrue(success, nil);
-  STAssertNil(error, error.description);
+  XCTAssertTrue(success);
+  XCTAssertNil(error, error.description);
   
   //Push object
   error = nil;    
   [postObject pushObject:@"user_3" forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
-  STAssertTrue(success, nil);
-  STAssertNil(error, error.description);
+  XCTAssertTrue(success);
+  XCTAssertNil(error, error.description);
   NSArray *list = [postObject objectForKey:kDKEntityTestsPostSharedTo];
   NSArray *comp = @[@"user_2", @"user_3"];
-  STAssertEqualObjects(list, comp, nil);
+  XCTAssertEqualObjects(list, comp);
 
   //Push all objects    
   error = nil;    
   [postObject pushAllObjects:@[@"user_4", @"user_5"] forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
-  STAssertTrue(success, nil);
-  STAssertNil(error, error.description);
+  XCTAssertTrue(success);
+  XCTAssertNil(error, error.description);
   list = [postObject objectForKey:kDKEntityTestsPostSharedTo];
   comp = @[@"user_2", @"user_3", @"user_4", @"user_5"];
-  STAssertEqualObjects(list, comp, nil);
+  XCTAssertEqualObjects(list, comp);
   
   //Delete post
   error = nil;
   success = [postObject delete:&error];
-  STAssertNil(error, @"delete post should not return error, did return %@", error);
-  STAssertTrue(success, @"delete post should have been successful (return YES)");
+  XCTAssertNil(error, @"delete post should not return error, did return %@", error);
+  XCTAssertTrue(success, @"delete post should have been successful (return YES)");
     
   [self deleteDefaultUser];    
 }
@@ -254,35 +254,35 @@
   NSMutableArray *values = [NSMutableArray arrayWithObjects:@"a", @"b", @"b", @"c", @"d", @"d", nil];    
   [postObject setObject:values forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
-  STAssertTrue(success, nil);
-  STAssertNil(error, error.description);
+  XCTAssertTrue(success);
+  XCTAssertNil(error, error.description);
   
   //Pull object
   error = nil;
   [postObject pullObject:@"b" forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
-  STAssertTrue(success, nil);
-  STAssertNil(error, error.description);
+  XCTAssertTrue(success);
+  XCTAssertNil(error, error.description);
   NSArray *list = [postObject objectForKey:kDKEntityTestsPostSharedTo];
   [values removeObject:@"b"];    
-  STAssertEqualObjects(values, list, nil);
+  XCTAssertEqualObjects(values, list);
   
   //Pull all objects
   error = nil;
   [postObject pullAllObjects:@[@"c", @"d"] forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
-  STAssertTrue(success, nil);
-  STAssertNil(error, error.description);
+  XCTAssertTrue(success);
+  XCTAssertNil(error, error.description);
   [values removeObject:@"c"];
   [values removeObject:@"d"];
   list = [postObject objectForKey:kDKEntityTestsPostSharedTo];
-  STAssertEqualObjects(values, list, nil);
+  XCTAssertEqualObjects(values, list);
 
   //Delete post
   error = nil;
   success = [postObject delete:&error];
-  STAssertNil(error, @"delete post should not return error, did return %@", error);
-  STAssertTrue(success, @"delete post should have been successful (return YES)");
+  XCTAssertNil(error, @"delete post should not return error, did return %@", error);
+  XCTAssertTrue(success, @"delete post should have been successful (return YES)");
     
   [self deleteDefaultUser];    
 }
