@@ -327,58 +327,61 @@
      return [self commitObjectResultMap:resultMap method:@"me" error:error];
 }
 
+- (id) validateKeys:(id)obj
+{
+	static NSCharacterSet *forbiddenChars = nil;
+	static NSArray* allowedKeys = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+        // Prevent use of '!', '$' and '.' in keys
+        if (forbiddenChars == nil) {
+            forbiddenChars = [NSCharacterSet characterSetWithCharactersInString:@"$."];
+        }
+        // Allowed use of $each
+        if (allowedKeys == nil) {
+            allowedKeys = @[@"$each"];
+        }
+	});
+
+	if ([obj isKindOfClass:[NSDictionary class]]) {
+		for (NSString *key in obj) {
+			NSRange range = [key rangeOfCharacterFromSet:forbiddenChars];
+			if (range.location != NSNotFound && [allowedKeys indexOfObject:key] == NSNotFound) {
+				[NSException raise:NSInvalidArgumentException
+							format:@"Invalid object key '%@'. Keys may not contain '$' or '.'", key];
+			}
+			id obj2 = obj[key];
+			[self validateKeys:obj2];
+		}
+	}
+	else if ([obj isKindOfClass:[NSArray class]]) {
+		for (id obj2 in obj) {
+			[self validateKeys:obj2];
+		}
+	}
+	return obj;
+}
+
 - (BOOL)sendAction:(NSString*)action error:(NSError **)error {
-    
+
         // Check if data has been written
         if (!self.isDirty &&
             !([action isEqualToString:@"login"] || [action isEqualToString:@"logout"])) {
             return YES;
         }
-        
-        // Prevent use of '!', '$' and '.' in keys
-        static NSCharacterSet *forbiddenChars;
-        if (forbiddenChars == nil) {
-            forbiddenChars = [NSCharacterSet characterSetWithCharactersInString:@"$."];
-        }
-        // Allowed use of $each
-        static NSArray* allowedKeys;
-        if (allowedKeys == nil) {
-            allowedKeys = @[@"$each"];
-        }
-    
-        __block id (^validateKeys)(id obj);
-        validateKeys = [^(id obj) {
-            if ([obj isKindOfClass:[NSDictionary class]]) {
-                for (NSString *key in obj) {
-                    NSRange range = [key rangeOfCharacterFromSet:forbiddenChars];
-                    if (range.location != NSNotFound && [allowedKeys indexOfObject:key] == NSNotFound) { 
-                        [NSException raise:NSInvalidArgumentException
-                                    format:@"Invalid object key '%@'. Keys may not contain '$' or '.'", key];
-                    }
-                    id obj2 = obj[key];
-                    validateKeys(obj2);
-                }
-            }
-            else if ([obj isKindOfClass:[NSArray class]]) {
-                for (id obj2 in obj) {
-                    validateKeys(obj2);
-                }
-            }
-            return obj;
-        } copy];
 
         // Create request dict
         NSMutableDictionary *requestDict = [NSMutableDictionary dictionaryWithObjectsAndKeys: nil];
         if([action isEqualToString:@"login"]){
             for (id key in self.loginMap) {
                 id value = (self.loginMap)[key];
-                requestDict[key] = validateKeys(value);
+                requestDict[key] = [self validateKeys:value];
             }
         }else{
             if (self.setMap.count > 0) {
                 for (id key in self.setMap) {
                     id value = (self.setMap)[key];
-                    requestDict[key] = validateKeys(value);
+					requestDict[key] = [self validateKeys:value];
                 }
             }
             if (self.incMap.count > 0) {
@@ -399,7 +402,7 @@
                     id value = (self.addToSetMap)[key];
                     [DKEntity deploydCommands:[NSMutableDictionary dictionaryWithObjectsAndKeys: value, key, nil] operation:@"$each" requestDict:addToSetDict];
                 }                
-                requestDict[@"$addToSet"] = validateKeys(addToSetDict);
+                requestDict[@"$addToSet"] = [self validateKeys:addToSetDict];
             }
         }
     
