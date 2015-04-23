@@ -95,7 +95,7 @@
   XCTAssertEqualObjects(data, file.data);
   success = [file save:&error];
   XCTAssertTrue(success);
-  XCTAssertNil(error, error.localizedDescription);
+  XCTAssertNil(error.localizedDescription);
   XCTAssertFalse(file.isVolatile);
   XCTAssertEqualObjects(data, file.data);
   NSString *fileName = file.name;
@@ -103,26 +103,30 @@
   //Check exists (YES)
   error = nil;
   BOOL exists = [DKFile fileExists:fileName error:&error];
-  XCTAssertNil(error, error.localizedDescription);
+  XCTAssertNil(error);
+  XCTAssertNil(error.localizedDescription);
   XCTAssertTrue(exists);
   
   //Load file
   error = nil;
   DKFile *file2 = [DKFile fileWithName:fileName];
   NSData *data2 = [file2 loadData:&error];
-  XCTAssertNil(error, error.localizedDescription);
+    XCTAssertNil(error);
+    XCTAssertNil(error.localizedDescription);
   XCTAssertTrue([data isEqualToData:data2]);
     
   //Delete file
   error = nil;
   success = [file2 delete];
   XCTAssertTrue(success);
-  XCTAssertNil(error, error.localizedDescription);
+    XCTAssertNil(error);
+    XCTAssertNil(error.localizedDescription);
     
   //Check exists (NO)
   error = nil;
   exists = [DKFile fileExists:fileName error:&error];
-  XCTAssertNil(error, error.localizedDescription);
+    XCTAssertNil(error);
+    XCTAssertNil(error.localizedDescription);
   XCTAssertFalse(exists);
 
   [self deleteDefaultUser];

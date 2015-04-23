@@ -290,6 +290,12 @@
 /** @name Executing Queries */
 
 /**
+ Finds a single matching entity
+ @return The matching entity
+ */
+- (DKEntity *)findOne;
+
+/**
  Finds all matching entities
  @return The matching entities
  */

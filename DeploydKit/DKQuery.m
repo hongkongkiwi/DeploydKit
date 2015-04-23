@@ -284,6 +284,14 @@
   return nil;
 }
 
+- (DKEntity *)findOne {
+    NSArray *results = [self findAll:NULL];
+    if (results && [results count] >= 1) {
+        return [results firstObject];
+    }
+    return nil;
+}
+
 - (NSArray *)findAll {
   return [self findAll:NULL];
 }

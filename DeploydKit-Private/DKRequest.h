@@ -11,6 +11,7 @@
 //
 
 #import "DKConstants.h"
+#import "NSURLConnection+Timeout.h"
 
 enum {
   DKResponseStatusSuccess = 200,

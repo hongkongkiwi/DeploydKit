@@ -72,12 +72,12 @@
   DKEntity *postObject1 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject1 setObject:@"post1" forKey:kDKEntityTestsPostText];
   success = [postObject1 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject2 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject2 setObject:@"post2" forKey:kDKEntityTestsPostText];
   success = [postObject2 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   
   //Fetch matching 'post1'
@@ -147,13 +147,13 @@
   [postObject1 setObject:@1.5 forKey:kDKEntityTestsPostPrice];
   [postObject1 setObject:@9.3 forKey:kDKEntityTestsPostQuantity];    
   success = [postObject1 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject2 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject2 setObject:@4.3 forKey:kDKEntityTestsPostPrice];
   [postObject2 setObject:@7.0 forKey:kDKEntityTestsPostQuantity];    
   success = [postObject2 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   
   //Query gt/lt
@@ -162,7 +162,7 @@
   [q whereKey:kDKEntityTestsPostPrice greaterThan:@1.0];
   [q whereKey:kDKEntityTestsPostPrice lessThan:@4.3];
   NSArray *results = [q findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   DKEntity *r0 = [results lastObject];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostPrice], @1.5);
@@ -174,7 +174,7 @@
   [q2 whereKey:kDKEntityTestsPostPrice greaterThan:@1.0];
   [q2 whereKey:kDKEntityTestsPostPrice lessThanOrEqualTo:@4.3];
   results = [q2 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)2);
   DKEntity *r1 = results[0];
   DKEntity *r2 = results[1];
@@ -189,7 +189,7 @@
   [q3 whereKey:kDKEntityTestsPostPrice greaterThan:@1.0];
   [q3 whereKey:kDKEntityTestsPostQuantity lessThanOrEqualTo:@7.0];
   results = [q3 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   DKEntity *r3 = [results lastObject];
   XCTAssertEqualObjects([r3 objectForKey:kDKEntityTestsPostPrice], @4.3);
@@ -220,21 +220,21 @@
   [postObject1 setObject:@2.0 forKey:kDKEntityTestsPostPrice];
   [postObject1 setObject:@1.0 forKey:kDKEntityTestsPostQuantity];
   success = [postObject1 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject2 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject2 setObject:@2.0 forKey:kDKEntityTestsPostVisits];
   [postObject2 setObject:@1.0 forKey:kDKEntityTestsPostPrice];
   [postObject2 setObject:@1.0 forKey:kDKEntityTestsPostQuantity];
   success = [postObject2 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject3 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject3 setObject:@2.0 forKey:kDKEntityTestsPostVisits];
   [postObject3 setObject:@2.0 forKey:kDKEntityTestsPostPrice];
   [postObject3 setObject:@1.0 forKey:kDKEntityTestsPostQuantity];
   success = [postObject3 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   
   //Or
@@ -243,7 +243,7 @@
   [[q or] whereKey:kDKEntityTestsPostVisits equalTo:@1.0];
   [[q or] whereKey:kDKEntityTestsPostPrice lessThanOrEqualTo:@1.0];
   NSArray *results = [q findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)2);
   DKEntity *r0 = results[0];
   DKEntity *r1 = results[1];
@@ -282,13 +282,13 @@
   [postObject1 setObject:@1.0 forKey:kDKEntityTestsPostPrice];
   [postObject1 setObject:@3.0 forKey:kDKEntityTestsPostQuantity];
   success = [postObject1 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject2 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject2 setObject:@1.0 forKey:kDKEntityTestsPostPrice];
   [postObject2 setObject:@2.0 forKey:kDKEntityTestsPostQuantity];
   success = [postObject2 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   
   //And (NOT WORK, NOT DOCUMENTED IN DEPLOYD 0.6.9v, MAY WORK IN FUTURE VERSIONS)
@@ -328,17 +328,17 @@
   DKEntity *postObject1 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject1 setObject:@"post1" forKey:kDKEntityTestsPostText];
   success = [postObject1 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject2 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject2 setObject:@"post2" forKey:kDKEntityTestsPostText];
   success = [postObject2 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject3 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject3 setObject:@"post3" forKey:kDKEntityTestsPostText];
   success = [postObject3 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   
   //Test contained-in
@@ -346,7 +346,7 @@
   DKQuery *q = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q whereKey:kDKEntityTestsPostText containedIn:@[@"post1", @"post2"]];
   NSArray *results = [q findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)2);
   DKEntity *r0 = results[0];
   DKEntity *r1 = results[1];
@@ -359,7 +359,7 @@
   [q2 whereKey:kDKEntityTestsPostText notContainedIn:@[@"post1", @"post2"]];
   error = nil;
   results = [q2 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   r0 = results[0];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostText], @"post3");
@@ -391,12 +391,12 @@
   DKEntity *postObject1 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject1 setObject:@[@"user1", @"user2", @"user3"] forKey:kDKEntityTestsPostSharedTo];
   success = [postObject1 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject2 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject2 setObject:@[@"user1", @"user2"] forKey:kDKEntityTestsPostSharedTo];
   success = [postObject2 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   
   //Test all-in
@@ -404,7 +404,7 @@
   DKQuery *q = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q whereKey:kDKEntityTestsPostSharedTo containsAllIn:@[@"user1", @"user2"]];
   NSArray *results = [q findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)2);
   DKEntity *r0 = results[0];
   DKEntity *r1 = results[1];
@@ -419,7 +419,7 @@
   [q2 whereKey:kDKEntityTestsPostSharedTo containsAllIn:@[@"user1", @"user2", @"user3"]];
   error = nil;
   results = [q2 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   r0 = results[0];
   m0 = @[@"user1", @"user2", @"user3"];
@@ -448,12 +448,12 @@
   DKEntity *postObject1 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject1 setObject:@1.0 forKey:kDKEntityTestsPostQuantity];
   success = [postObject1 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject2 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject2 setObject:@50.0 forKey:kDKEntityTestsPostPrice];
   success = [postObject2 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
 
   //Test exists
@@ -461,7 +461,7 @@
   DKQuery *q = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q whereKeyExists:kDKEntityTestsPostQuantity];
   NSArray *results = [q findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   DKEntity *r0 = [results lastObject];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostQuantity], @1.0);
@@ -471,7 +471,7 @@
   DKQuery *q2 = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q2 whereKeyDoesNotExist:kDKEntityTestsPostQuantity];
   results = [q2 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   r0 = [results lastObject];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostPrice], @50.0);
@@ -499,17 +499,17 @@
   DKEntity *postObject1 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject1 setObject:@0 forKey:kDKEntityTestsPostVisits];
   success = [postObject1 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject2 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject2 setObject:@1 forKey:kDKEntityTestsPostVisits];
   success = [postObject2 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject3 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject3 setObject:@2 forKey:kDKEntityTestsPostVisits];
   success = [postObject3 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
     
   //Test asc
@@ -517,7 +517,7 @@
   DKQuery *q = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q orderAscendingByKey:kDKEntityTestsPostVisits];
   NSArray *results = [q findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)3);
   DKEntity *r0 = results[0];
   DKEntity *r1 = results[1];
@@ -531,7 +531,7 @@
   DKQuery *q2 = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q2 orderDescendingByKey:kDKEntityTestsPostVisits];
   results = [q2 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)3);
   r0 = results[0];
   r1 = results[1];
@@ -546,7 +546,7 @@
   [q3 orderDescendingByKey:kDKEntityTestsPostVisits];
   [q3 setLimit:2];
   results = [q3 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)2);
   r0 = results[0];
   r1 = results[1];
@@ -560,7 +560,7 @@
   [q4 setSkip:2];
   error = nil;
   results = [q4 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   r0 = results[0];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostVisits], @0);
@@ -601,13 +601,13 @@
   [postObject1 setObject:@"some words\nwith a newline\ninbetween" forKey:kDKEntityTestsPostText];
   [postObject1 setObject:@0 forKey:kDKEntityTestsPostQuantity];
   success = [postObject1 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject2 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject2 setObject:@"another\nrandom regex\nstring" forKey:kDKEntityTestsPostText];
   [postObject2 setObject:@1 forKey:kDKEntityTestsPostQuantity];
   success = [postObject2 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   
   //Test standard regex
@@ -615,7 +615,7 @@
   DKQuery *q = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q whereKey:kDKEntityTestsPostText matchesRegex:@"\\s+words"];
   NSArray *results = [q findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   DKEntity *r0 = [results lastObject];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostQuantity], @0);
@@ -625,7 +625,7 @@
   DKQuery *q2 = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q2 whereKey:kDKEntityTestsPostText matchesRegex:@"regex$" options:DKRegexOptionMultiline];
   results = [q2 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   r0 = [results lastObject];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostQuantity], @1);
@@ -635,7 +635,7 @@
   DKQuery *q3 = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q3 whereKey:kDKEntityTestsPostText matchesRegex:@"regex$" options:0];
   results = [q3 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)0);
   
   //Test dotall regex
@@ -643,7 +643,7 @@
   DKQuery *q4 = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q4 whereKey:kDKEntityTestsPostText matchesRegex:@"regex.*string" options:DKRegexOptionDotall];
   results = [q4 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   r0 = [results lastObject];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostQuantity], @1);
@@ -653,7 +653,7 @@
   DKQuery *q5 = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q5 whereKey:kDKEntityTestsPostText matchesRegex:@"regex.*string" options:0];
   results = [q5 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)0);
   
   //Test contains string (simple regex)
@@ -661,7 +661,7 @@
   DKQuery *q6 = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q6 whereKey:kDKEntityTestsPostText containsString:@"newline\nin" caseInsensitive:YES];
   results = [q6 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   r0 = [results lastObject];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostQuantity], @0);
@@ -671,7 +671,7 @@
   DKQuery *q7 = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q7 whereKey:kDKEntityTestsPostText hasPrefix:@"some"];
   results = [q7 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   r0 = [results lastObject];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostQuantity], @0);
@@ -681,7 +681,7 @@
   DKQuery *q8 = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q8 whereKey:kDKEntityTestsPostText hasSuffix:@"ing"];
   results = [q8 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   r0 = [results lastObject];
   XCTAssertEqualObjects([r0 objectForKey:kDKEntityTestsPostQuantity], @1);
@@ -710,12 +710,12 @@
   [postObject1 setObject:@10 forKey:kDKEntityTestsPostQuantity];
   [postObject1 setObject:@50 forKey:kDKEntityTestsPostPrice];
   success = [postObject1 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   DKEntity *postObject2 = [DKEntity entityWithName:kDKEntityTestsPost];
   [postObject2 setObject:@10 forKey:kDKEntityTestsPostQuantity];
   success = [postObject2 save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
     
   //Verify find all returns 2 objects
@@ -723,7 +723,7 @@
   DKQuery *q = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q whereKey:kDKEntityTestsPostQuantity equalTo:@10];
   NSArray *results = [q findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);    
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription);     
   XCTAssertEqual(results.count, (NSUInteger)2);
   
   //Test count (NOT WORK, NOT DOCUMENTED IN DEPLOYD 0.6.9v, MAY WORK IN FUTURE VERSIONS)
@@ -741,7 +741,7 @@
   DKQuery *q4 = [DKQuery queryWithEntityName:kDKEntityTestsPost];
   [q4 whereEntityIdMatches:postObject2.entityId];
   results = [q4 findAll:&error];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)1);
   DKEntity *r0 = results[0];
   XCTAssertEqualObjects(postObject2.entityId, r0.entityId);
@@ -771,7 +771,7 @@
   [postObject setObject:@10 forKey:kDKEntityTestsPostQuantity];
   [postObject setObject:@50 forKey:kDKEntityTestsPostPrice];
   success = [postObject save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   
   //Test exclude
@@ -782,7 +782,7 @@
   NSArray * results = [q findAll:&error];
   XCTAssertEqual(results.count, (NSUInteger)1);
   DKEntity *e2 = results[0];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertNotNil(e2);
   XCTAssertNil([e2 objectForKey:kDKEntityTestsPostText]);
   XCTAssertNil([e2 objectForKey:kDKEntityTestsPostQuantity]);
@@ -794,7 +794,7 @@
   results = [q findAll:&error];
   XCTAssertEqual(results.count, (NSUInteger)1);
   DKEntity *e3 = results[0];
-  XCTAssertNil(error, error.localizedDescription);
+XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertNotNil(e3);
   XCTAssertEqualObjects([e3 objectForKey:kDKEntityTestsPostText], @"post");
   XCTAssertEqualObjects([e3 objectForKey:kDKEntityTestsPostQuantity], @10);
@@ -815,7 +815,7 @@
   DKQuery *q = [DKQuery queryWithEntityName:@"NonExistentCollection"];
   [q whereKey:@"a" equalTo: @"x"];
   NSArray *results = [q findAll:&error];
-  XCTAssertNotNil(error, error.localizedDescription);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertEqual(results.count, (NSUInteger)0, @"not nil: %@", results);
 }
 

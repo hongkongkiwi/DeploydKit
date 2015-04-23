@@ -44,7 +44,7 @@ static DKChannel* currentChannel = nil;
     //NSString * appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
     NSString * timeZone = [[NSTimeZone systemTimeZone] name]; //[[NSTimeZone defaultTimeZone] name];
     [currentChannel setObject:timeZone forKey:kDKEntityChannelTimeZone];
-    NSString * currentLocale = [[NSLocale currentLocale] identifier];
+    NSString * currentLocale = [[NSLocale currentLocale] localeIdentifier];
     [currentChannel setObject:currentLocale forKey:kDKEntityChannelLocale];
     NSString * preferredLanguage = [NSLocale preferredLanguages][0];
     [currentChannel setObject:preferredLanguage forKey:kDKEntityChannelLanguage];

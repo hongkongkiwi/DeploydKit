@@ -182,7 +182,7 @@
   [postObject setObject:@"My first post" forKey:kDKEntityTestsPostText];
   [postObject setObject:@3 forKey:kDKEntityTestsPostVisits];
   success = [postObject save:&error];
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   XCTAssertTrue(success);
   XCTAssertEqual([[postObject objectForKey:kDKEntityTestsPostVisits] integerValue], (NSInteger)3);
   
@@ -212,14 +212,14 @@
   [postObject setObject:@[@"user_2"] forKey:kDKEntityTestsPostSharedTo];  
   success = [postObject save:&error];
   XCTAssertTrue(success);
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   
   //Push object
   error = nil;    
   [postObject pushObject:@"user_3" forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
   XCTAssertTrue(success);
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   NSArray *list = [postObject objectForKey:kDKEntityTestsPostSharedTo];
   NSArray *comp = @[@"user_2", @"user_3"];
   XCTAssertEqualObjects(list, comp);
@@ -229,7 +229,7 @@
   [postObject pushAllObjects:@[@"user_4", @"user_5"] forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
   XCTAssertTrue(success);
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   list = [postObject objectForKey:kDKEntityTestsPostSharedTo];
   comp = @[@"user_2", @"user_3", @"user_4", @"user_5"];
   XCTAssertEqualObjects(list, comp);
@@ -255,14 +255,14 @@
   [postObject setObject:values forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
   XCTAssertTrue(success);
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   
   //Pull object
   error = nil;
   [postObject pullObject:@"b" forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
   XCTAssertTrue(success);
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   NSArray *list = [postObject objectForKey:kDKEntityTestsPostSharedTo];
   [values removeObject:@"b"];    
   XCTAssertEqualObjects(values, list);
@@ -272,7 +272,7 @@
   [postObject pullAllObjects:@[@"c", @"d"] forKey:kDKEntityTestsPostSharedTo];
   success = [postObject save:&error];
   XCTAssertTrue(success);
-  XCTAssertNil(error, error.description);
+  XCTAssertNil(error); XCTAssertNil(error.localizedDescription); 
   [values removeObject:@"c"];
   [values removeObject:@"d"];
   list = [postObject objectForKey:kDKEntityTestsPostSharedTo];

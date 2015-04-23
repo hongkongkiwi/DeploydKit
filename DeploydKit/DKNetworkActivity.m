@@ -15,6 +15,7 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "AFNetworking.h"
+#import "AFNetworkActivityIndicatorManager.h"
 
 @implementation DKNetworkActivity
 
