@@ -26,23 +26,24 @@
 
 @implementation DKFile
 
-+ (DKFile *)fileWithData:(NSData *)data {
-  return [[self alloc] initWithName:nil data:data];
++ (DKFile *)fileWithData:(NSData *)data inCollection:(NSString *)collection {
+    return [[self alloc] initWithName:nil data:data inCollection:collection];
 }
 
-+ (DKFile *)fileWithName:(NSString *)name {
-  return [[self alloc] initWithName:name data:nil];
++ (DKFile *)fileWithName:(NSString *)name inCollection:(NSString *)collection {
+  return [[self alloc] initWithName:name data:nil inCollection:collection];
 }
 
-+ (DKFile *)fileWithName:(NSString *)name data:(NSData *)data {
-  return [[self alloc] initWithName:name data:data];
++ (DKFile *)fileWithName:(NSString *)name data:(NSData *)data inCollection:(NSString *)collection {
+    return [[self alloc] initWithName:name data:data inCollection:collection];
 }
 
-- (id)initWithName:(NSString *)name data:(NSData *)data {
+- (id)initWithName:(NSString *)name data:(NSData *)data inCollection:(NSString *)collection {
   self = [self init];
   if (self) {
     self.data = data;
     self.name = name;
+    self.s3bucketCollection = collection;
     self.isVolatile = YES;
     self.cachePolicy = DKCachePolicyIgnoreCache;
     self.maxCacheAge = [EGOCache globalCache].defaultTimeoutInterval;
@@ -163,7 +164,7 @@
   }
     
   // Create url request
-  NSString *ep = [[DKManager APIEndpoint] stringByAppendingPathComponent:kDKRequestFileHandler];
+  NSString *ep = [[DKManager APIEndpoint] stringByAppendingPathComponent:self.s3bucketCollection];
   if (self.name.length > 0) {
       ep = [ep stringByAppendingPathComponent:self.name];
   }
@@ -175,14 +176,14 @@
   req.HTTPBody = self.data;
   req.HTTPMethod = @"POST";
   
-  NSString *contentLen = [NSString stringWithFormat:@"%u", self.data.length];
+  NSString *contentLen = [NSString stringWithFormat:@"%lu", (unsigned long)self.data.length];
   
   [req setValue:contentLen forHTTPHeaderField:@"Content-Length"];
   [req setValue:@"application/octet-stream" forHTTPHeaderField:@"Content-Type"];
   
   // Log
   if ([DKManager requestLogEnabled]) {
-    NSLog(@"[FILE] save '%@' (%u bytes)", self.name, self.data.length);
+    NSLog(@"[FILE] save '%@' (%lu bytes)", self.name, (unsigned long)self.data.length);
   }
   
   // Start network activity indicator
@@ -253,7 +254,7 @@
   }
   
   // Create url request
-  NSString *ep = [[DKManager APIEndpoint] stringByAppendingPathComponent:kDKRequestFileHandler];
+  NSString *ep = [[DKManager APIEndpoint] stringByAppendingPathComponent:self.s3bucketCollection];
   if (self.name.length > 0) {
     ep = [ep stringByAppendingPathComponent:self.name];
   }
@@ -298,7 +299,7 @@
   }
     
   if ([DKManager requestLogEnabled]) {
-    NSLog(@"[FILE IN%@] loaded size '%u' byte",(loadFromCache ? @" CACHE" : @""),result?result.length:0);
+    NSLog(@"[FILE IN%@] loaded size '%lu' byte",(loadFromCache ? @" CACHE" : @""),(unsigned long)(result?result.length:0));
   }
     
   if(!loadFromCache) {

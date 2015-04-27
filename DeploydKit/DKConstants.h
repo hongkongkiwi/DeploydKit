@@ -40,7 +40,7 @@ enum {
 typedef NSInteger DKRegexOption;
 
 //deployd collections for files handle on Amazon S3
-#define kDKRequestFileHandler @"s3bucket"
+//#define kDKRequestFileHandler @"s3bucket"
 #define kDKRequestFileCollection @"files"
 //deployd field name of files collection
 #define kDKRequestAssignedFileName @"fileName"
@@ -49,11 +49,13 @@ typedef NSInteger DKRegexOption;
 #define kDKEntityUserPassword @"password"
 //deployd fields name for all collections
 #define kDKEntityIDField @"id"
-#define kDKEntityUpdatedAtField @"updatedAt"
-#define kDKEntityCreatedAtField @"createdAt"
-#define kDKEntityCreatorIdField @"creatorId"
+#define kDKEntityUpdatedAtField @"lastModifiedDate"
+#define kDKEntityCreatedAtField @"createdDate"
+#define kDKEntityCreatorIdField @"createdBy"
+
 //deployd collections for apn
 #define kDKRequestPushChannel @"apn"
+
 //deployd channel fields
 #define kDKEntityChannel @"channel"
 #define kDKEntityChannelUDID @"udid"
