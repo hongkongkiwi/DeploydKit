@@ -102,7 +102,7 @@
   
   // Set error
   if (internalErr != nil) {
-    NSLog(@"error: %@ (%i)", internalErr.localizedDescription, internalErr.code);
+    NSLog(@"error: %@ (%li)", internalErr.localizedDescription, (long)internalErr.code);
     if (error != NULL) {
       *error = internalErr;
     }

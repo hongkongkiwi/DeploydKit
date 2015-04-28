@@ -306,7 +306,7 @@
 #else
 	dispatch_queue_t q = dispatch_get_current_queue();
 #endif
-  dispatch_async([DKManager queue], ^{
+  dispatch_async([DKManager sharedInstance].dispatchQueue, ^{
     NSError *error = nil;
     NSArray *entities = [self findAll:&error];
     if (block != NULL) {
@@ -333,7 +333,7 @@
 #else
 	dispatch_queue_t q = dispatch_get_current_queue();
 #endif
-  dispatch_async([DKManager queue], ^{
+  dispatch_async([DKManager sharedInstance].dispatchQueue, ^{
     NSError *error = nil;
     NSUInteger count = [self countAll:&error];
     if (block != NULL) {

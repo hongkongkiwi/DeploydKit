@@ -10,127 +10,85 @@
 //  Copyright (c) 2012 chocomoko.com. All rights reserved.
 //
 
+// TODO: We should change this to be from a global instance to be an instance that's passed to each object that's created. E.g. [DKEntity fileName: withManager: ]; that way we can support multi instance enviroments
+
 #import "DKManager.h"
 #import "DKRequest.h"
 #import "DKReachability.h"
 #import "EGOCache.h"
 
+@interface DKManager()
+@property (nonatomic, strong) DKReachability *reachability;
+@end
+
 @implementation DKManager
 
-static NSString *kDKManagerAPIEndpoint;
-static BOOL kDKManagerRequestLogEnabled;
-static NSString *kDKManagerAPISecret;
-static NSString *kDKManagerSessionId;
-static BOOL kDKManagerReachable;
-static NSTimeInterval kDKManagerMaxCacheAge;
-
-+ (void)setAPIEndpoint:(NSString *)absoluteString {
-  NSURL *ep = [NSURL URLWithString:absoluteString];
-  if (![ep.scheme isEqualToString:@"https"]) {
++ (DKManager *) sharedInstance {
+    
+    static DKManager *instance = nil;
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        instance = [[DKManager alloc]init];
+    });
+    
+    return instance;
+}
+
+- (DKManager *) init {
+    if (self = [super init]) {
+        self.dispatchQueue = dispatch_queue_create("DeploydKit queue", DISPATCH_QUEUE_SERIAL);
+    }
+    return self;
+}
+
+- (void) setApiEndPoint:(NSString *)apiEndPoint {
+    NSURL *ep = [NSURL URLWithString:apiEndPoint];
+    if (![ep.scheme isEqualToString:@"https"]) {
       NSLog(@"\n\nWARNING: DeploydKit API endpoint not secured! "
             "It's highly recommended to use SSL (current scheme is '%@')\n\n",
             ep.scheme);
-    });
-    
-  }
-  kDKManagerAPIEndpoint = [absoluteString copy];
-    
-  // allocate a reachability object
-  DKReachability* reach = [DKReachability reachabilityWithHostname:ep.host];
-  DKNetworkStatus internetStatus = [reach currentReachabilityStatus];
-  if(internetStatus == DKNotReachable)
-    kDKManagerReachable = NO;
-  else
-    kDKManagerReachable = YES;
+    }
+    _apiEndPoint = apiEndPoint;
 
-  // here we set up a NSNotification observer. The Reachability that caused the notification
-  // is passed in the object parameter
-  [[NSNotificationCenter defaultCenter] addObserver:[self class]
+    // allocate a reachability object
+    self.reachability = [DKReachability reachabilityWithHostname:ep.host];
+    DKNetworkStatus internetStatus = [self.reachability currentReachabilityStatus];
+    
+    if (internetStatus == DKNotReachable) {
+        self.internetReachable = NO;
+    } else {
+        self.internetReachable = YES;
+    }
+        
+    // here we set up a NSNotification observer. The Reachability that caused the notification
+    // is passed in the object parameter
+    [[NSNotificationCenter defaultCenter] addObserver:[self class]
                                              selector:@selector(reachabilityChanged:)
                                                  name:kReachabilityChangedNotification
                                                object:nil];
-  [reach startNotifier];
+    [self.reachability startNotifier];
 }
 
-+ (void)setAPISecret:(NSString *)secret {
-    kDKManagerAPISecret = [secret copy];
+- (NSURL *) endpointForMethod:(NSString *)method {
+    return [NSURL URLWithString:[self.apiEndPoint stringByAppendingPathComponent:method]];
 }
 
-+ (void)setSessionId:(NSString *)sid {
-  kDKManagerSessionId = [sid copy];
-}
-
-+ (NSString *)APIEndpoint {
-  if (kDKManagerAPIEndpoint.length == 0) {
-    [NSException raise:NSInternalInconsistencyException format:@"No API endpoint specified"];
-    return nil;
-  }
-  return kDKManagerAPIEndpoint;
-}
-
-+ (NSURL *)endpointForMethod:(NSString *)method {
-  NSString *ep = [[self APIEndpoint] stringByAppendingPathComponent:method];
-  return [NSURL URLWithString:ep];
-}
-
-+ (NSString *)APISecret {
-    if (kDKManagerAPISecret.length == 0) {
-        [NSException raise:NSInternalInconsistencyException format:@"No API secret specified"];
-        return nil;
-    }
-    return kDKManagerAPISecret;
-}
-
-+ (NSString *)sessionId {
-  return kDKManagerSessionId;
-}
-
-+ (dispatch_queue_t)queue {
-  static dispatch_queue_t q;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    q = dispatch_queue_create("DeploydKit queue", DISPATCH_QUEUE_SERIAL);
-  });
-  return q;
-}
-
-+ (void)setRequestLogEnabled:(BOOL)flag {
-  kDKManagerRequestLogEnabled = flag;
-}
-
-+ (BOOL)requestLogEnabled {
-  return kDKManagerRequestLogEnabled;
-}
-
-+ (BOOL)endpointReachable {
-    return kDKManagerReachable;
-}
-
-+ (void)setMaxCacheAge:(NSTimeInterval)maxCacheAge{
-  kDKManagerMaxCacheAge = maxCacheAge;
-}
-
-+ (NSTimeInterval)maxCacheAge{
-    return kDKManagerMaxCacheAge;
-}
-
-+ (void)clearAllCachedResults{
+- (void)clearAllCachedResults{
   [[EGOCache globalCache] clearCache];
 }
 
 //Called by DKReachability whenever status changes.
 + (void)reachabilityChanged: (NSNotification* )note
-{    
+{
     DKReachability* curReach = [note object];
     NSParameterAssert([curReach isKindOfClass: [DKReachability class]]);
     DKNetworkStatus internetStatus = [curReach currentReachabilityStatus];
     if(internetStatus == DKNotReachable) {
-        kDKManagerReachable = NO;
+        [DKManager sharedInstance].internetReachable = NO;
         return;
     }
-    kDKManagerReachable = YES;
+    [DKManager sharedInstance].internetReachable = YES;
 }
 
 @end

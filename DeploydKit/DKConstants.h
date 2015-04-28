@@ -41,12 +41,15 @@ typedef NSInteger DKRegexOption;
 
 //deployd collections for files handle on Amazon S3
 //#define kDKRequestFileHandler @"s3bucket"
-#define kDKRequestFileCollection @"files"
+//#define kDKRequestFileCollection @"files"
+
 //deployd field name of files collection
-#define kDKRequestAssignedFileName @"fileName"
+//#define kDKRequestAssignedFileName @"fileName"
+
 //deployd user fields for login
 #define kDKEntityUserName @"username"
 #define kDKEntityUserPassword @"password"
+
 //deployd fields name for all collections
 #define kDKEntityIDField @"id"
 #define kDKEntityUpdatedAtField @"lastModifiedDate"

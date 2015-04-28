@@ -10,6 +10,8 @@
 //  Copyright (c) 2012 chocomoko.com. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 #import "DKQuery.h"
 #import "DKEntity.h"
 

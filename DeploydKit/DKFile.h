@@ -18,11 +18,6 @@
 @interface DKFile : NSObject
 
 /**
- The collection that the file is stored on the server
- */
-@property (nonatomic, strong) NSString *s3bucketCollection;
-
-/**
  If `YES` the file is not stored on the server, `NO` otherwise.
  */
 @property (nonatomic, assign, readonly) BOOL isVolatile;
@@ -52,6 +47,8 @@
  */
 @property (readwrite, assign) NSTimeInterval maxCacheAge;
 
+@property (nonatomic, strong) NSDictionary *config;
+
 /** @name Creating and Initializing Files */
 
 /**
@@ -61,7 +58,7 @@
  @param data The file data
  @return The initialized file
  */
-+ (DKFile *)fileWithData:(NSData *)data inCollection:(NSString *)collection;
++ (DKFile *)fileWithData:(NSData *)data;
 
 /**
  Creates a new file with the given name.
@@ -70,7 +67,7 @@
  @param name The filename
  @return The empty initialized file
  */
-+ (DKFile *)fileWithName:(NSString *)name inCollection:(NSString *)collection;
++ (DKFile *)fileWithName:(NSString *)name;
 
 /**
  Creates a new file with the given name and data
@@ -78,7 +75,7 @@
  @param data The file data
  @return The initialized file
  */
-+ (DKFile *)fileWithName:(NSString *)name data:(NSData *)data inCollection:(NSString *)collection;
++ (DKFile *)fileWithName:(NSString *)name data:(NSData *)data;
 
 /**
  Initializes a new file with the given data and name.
@@ -88,7 +85,7 @@
  @param data The file data
  @return The initialized file
  */
-- (id)initWithName:(NSString *)name data:(NSData *)data inCollection:(NSString *)collection;
+- (id)initWithName:(NSString *)name data:(NSData *)data;
 
 /** @name Checking Existence */
 

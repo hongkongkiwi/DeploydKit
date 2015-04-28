@@ -26,24 +26,23 @@
 
 @implementation DKFile
 
-+ (DKFile *)fileWithData:(NSData *)data inCollection:(NSString *)collection {
-    return [[self alloc] initWithName:nil data:data inCollection:collection];
++ (DKFile *)fileWithData:(NSData *)data {
+    return [[self alloc] initWithName:nil data:data];
 }
 
-+ (DKFile *)fileWithName:(NSString *)name inCollection:(NSString *)collection {
-  return [[self alloc] initWithName:name data:nil inCollection:collection];
++ (DKFile *)fileWithName:(NSString *)name {
+  return [[self alloc] initWithName:name data:nil];
 }
 
-+ (DKFile *)fileWithName:(NSString *)name data:(NSData *)data inCollection:(NSString *)collection {
-    return [[self alloc] initWithName:name data:data inCollection:collection];
++ (DKFile *)fileWithName:(NSString *)name data:(NSData *)data {
+    return [[self alloc] initWithName:name data:data];
 }
 
-- (id)initWithName:(NSString *)name data:(NSData *)data inCollection:(NSString *)collection {
+- (id)initWithName:(NSString *)name data:(NSData *)data {
   self = [self init];
   if (self) {
     self.data = data;
     self.name = name;
-    self.s3bucketCollection = collection;
     self.isVolatile = YES;
     self.cachePolicy = DKCachePolicyIgnoreCache;
     self.maxCacheAge = [EGOCache globalCache].defaultTimeoutInterval;
@@ -68,8 +67,8 @@
   DKRequest *request = [DKRequest request];
   request.cachePolicy = DKCachePolicyIgnoreCache;
 
-  NSDictionary *requestDict = @{kDKRequestAssignedFileName: fileName};
-  NSMutableString * queryParams = [NSMutableString stringWithString:kDKRequestFileCollection];
+  NSDictionary *requestDict = @{[DKManager sharedInstance].fileRecordFileNameProperty: fileName};
+  NSMutableString * queryParams = [NSMutableString stringWithString:[DKManager sharedInstance].fileRecordCollection];
     
   NSError *requestError = nil;
   id results = [request sendRequestWithObject:requestDict method:@"query" entity:queryParams error:&requestError];
@@ -83,7 +82,7 @@
   if ([results isKindOfClass:[NSArray class]]) {
     for (NSDictionary *objDict in results) {
         if ([objDict isKindOfClass:[NSDictionary class]]) {
-                NSString *resultFileName = objDict[kDKRequestAssignedFileName];
+                NSString *resultFileName = objDict[[DKManager sharedInstance].fileRecordFileNameProperty];
                 return [fileName isEqualToString: resultFileName];
         }
     }
@@ -99,7 +98,7 @@
 #else
 	dispatch_queue_t q = dispatch_get_current_queue();
 #endif
-  dispatch_async([DKManager queue], ^{
+  dispatch_async([DKManager sharedInstance].dispatchQueue, ^{
     NSError *error = nil;
     BOOL exists = [self fileExists:fileName error:&error];
     if (block != NULL) {
@@ -118,7 +117,7 @@
     NSDictionary *dict = @{};
 
     NSError *requestError = nil;
-    [request sendRequestWithObject:dict method:@"delete" entity:[kDKRequestFileCollection stringByAppendingPathComponent:fileName] error:&requestError];
+    [request sendRequestWithObject:dict method:@"delete" entity:[[DKManager sharedInstance].fileRecordCollection stringByAppendingPathComponent:fileName] error:&requestError];
     if (requestError != nil) {
         if (error != nil) {
             *error = requestError;
@@ -143,7 +142,7 @@
 #else
 	dispatch_queue_t q = dispatch_get_current_queue();
 #endif
-  dispatch_async([DKManager queue], ^{
+  dispatch_async([DKManager sharedInstance].dispatchQueue, ^{
     NSError *error = nil;
     BOOL success = [self delete:&error];
     if (block != NULL) {
@@ -164,7 +163,8 @@
   }
     
   // Create url request
-  NSString *ep = [[DKManager APIEndpoint] stringByAppendingPathComponent:self.s3bucketCollection];
+  NSString *ep = [[DKManager sharedInstance].apiEndPoint stringByAppendingPathComponent:[DKManager sharedInstance].s3bucketCollection];
+
   if (self.name.length > 0) {
       ep = [ep stringByAppendingPathComponent:self.name];
   }
@@ -182,7 +182,7 @@
   [req setValue:@"application/octet-stream" forHTTPHeaderField:@"Content-Type"];
   
   // Log
-  if ([DKManager requestLogEnabled]) {
+  if ([DKManager sharedInstance].requestLoggingEnabled) {
     NSLog(@"[FILE] save '%@' (%lu bytes)", self.name, (unsigned long)self.data.length);
   }
   
@@ -217,7 +217,7 @@
                  original:JSONError];
   }
   if([resultObj isKindOfClass:[NSDictionary class]]){
-    self.name = resultObj[kDKRequestAssignedFileName];
+    self.name = resultObj[[DKManager sharedInstance].fileRecordFileNameProperty];
     if(!self.name) return NO;
     self.isVolatile = NO;
     if(resultBlock) resultBlock(YES,nil);
@@ -254,18 +254,22 @@
   }
   
   // Create url request
-  NSString *ep = [[DKManager APIEndpoint] stringByAppendingPathComponent:self.s3bucketCollection];
+  NSString *ep = [[DKManager sharedInstance].apiEndPoint stringByAppendingPathComponent:[DKManager sharedInstance].s3bucketCollection];
   if (self.name.length > 0) {
     ep = [ep stringByAppendingPathComponent:self.name];
   }
   NSURL *URL = [NSURL URLWithString:ep];
+    
+    if ([DKManager sharedInstance].requestLoggingEnabled) {
+        NSLog(@"URL: %@", URL);
+    }
     
   NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:URL];
   req.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
   req.HTTPMethod = @"GET";  
   
   // Log
-  if ([DKManager requestLogEnabled]) {
+  if ([DKManager sharedInstance].requestLoggingEnabled) {
     NSLog(@"[FILE OUT] load name '%@'", self.name);
   }
   
@@ -290,7 +294,7 @@
         }
         break;
     case DKCachePolicyUseCacheIfOffline:
-        if(![DKManager endpointReachable] && [req.HTTPMethod isEqualToString:@"GET"]){
+        if(![DKManager sharedInstance].internetReachable && [req.HTTPMethod isEqualToString:@"GET"]){
             result = [[EGOCache globalCache] dataForKey:self.name];
             loadFromCache = YES;
         }else{
@@ -298,7 +302,7 @@
         }
   }
     
-  if ([DKManager requestLogEnabled]) {
+  if ([DKManager sharedInstance].requestLoggingEnabled) {
     NSLog(@"[FILE IN%@] loaded size '%lu' byte",(loadFromCache ? @" CACHE" : @""),(unsigned long)(result?result.length:0));
   }
     

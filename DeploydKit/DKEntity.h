@@ -185,6 +185,15 @@
  */
 - (id)objectForKey:(NSString *)key;
 
+/**
+ Gets the BOOL stored at `key`.
+ 
+ If the key does not exist in the saved object, tries to return a value from the unsaved changes.
+ @param key The object key
+ @return The BOOL or `NO` if no object is set for `key`
+ */
+- (BOOL)boolForKey:(NSString *)key;
+
 /** @name Modifying Objects*/
 
 /**

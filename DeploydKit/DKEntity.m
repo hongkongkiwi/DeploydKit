@@ -113,7 +113,7 @@
 #else
   dispatch_queue_t q = dispatch_get_current_queue();
 #endif
-  dispatch_async([DKManager queue], ^{
+  dispatch_async([DKManager sharedInstance].dispatchQueue, ^{
     NSError *error = nil;
     [self save:&error];
     if (block != NULL) {
@@ -165,7 +165,7 @@
 #else
 	dispatch_queue_t q = dispatch_get_current_queue();
 #endif
-  dispatch_async([DKManager queue], ^{
+  dispatch_async([DKManager sharedInstance].dispatchQueue, ^{
     NSError *error = nil;
     [self refresh:&error];
     if (block != NULL) {
@@ -222,7 +222,7 @@
 #else
 	dispatch_queue_t q = dispatch_get_current_queue();
 #endif
-  dispatch_async([DKManager queue], ^{
+  dispatch_async([DKManager sharedInstance].dispatchQueue, ^{
     NSError *error = nil;
     [self delete:&error];
     if (block != NULL) {
@@ -231,6 +231,17 @@
       });
     }
   });
+}
+
+- (BOOL)boolForKey:(NSString *)key {
+    id obj = (self.setMap)[key];
+    if (obj == nil) {
+        obj = (self.resultMap)[key];
+    }
+    if ([obj isKindOfClass:[NSNumber class]]) {
+        return [obj boolValue];
+    }
+    return NO;
 }
 
 - (id)objectForKey:(NSString *)key {

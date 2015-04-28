@@ -16,6 +16,6 @@
 #import "DKEntity.h"
 #import "DKQuery.h"
 #import "DKFile.h"
-#import "DKChannel.h"
+//#import "DKChannel.h"
 #import "DKQueryTableViewController.h"
 #import "DKNetworkActivity.h"

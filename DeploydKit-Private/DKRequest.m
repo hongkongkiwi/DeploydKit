@@ -40,7 +40,7 @@
 }
 
 - (id)init {
-  return [self initWithEndpoint:[DKManager APIEndpoint]];
+  return [self initWithEndpoint:[DKManager sharedInstance].apiEndPoint];
 }
 
 - (id)initWithEndpoint:(NSString *)absoluteString {
@@ -103,7 +103,7 @@
   req.HTTPMethod = [self httpMethod:apiMethod];
     
   // Log request
-  if ([DKManager requestLogEnabled]) {
+  if ([DKManager sharedInstance].requestLoggingEnabled) {
       NSLog(@"[URL] %@", urlString);
   }
     
@@ -119,7 +119,7 @@
   }
   else{
       // Log
-      if ([DKManager requestLogEnabled]) {
+      if ([DKManager sharedInstance].requestLoggingEnabled) {
           NSLog(@"[OUT EMPTY]");
       }
   }
@@ -150,7 +150,7 @@
         }
         break;
     case DKCachePolicyUseCacheIfOffline:
-        if(![DKManager endpointReachable] && [req.HTTPMethod isEqualToString:@"GET"]){
+        if(![DKManager sharedInstance].internetReachable && [req.HTTPMethod isEqualToString:@"GET"]){
             result = [[EGOCache globalCache] dataForKey:self.keyCache?self.keyCache:[self md5:entityName]];
             loadFromCache = YES;
         }else{
@@ -261,7 +261,7 @@
 {
     const char *cStr = [str UTF8String];
     unsigned char result[16];
-    CC_MD5( cStr, strlen(cStr), result ); // This is the md5 call
+    CC_MD5( cStr, (unsigned int)strlen(cStr), result ); // This is the md5 call
     return [NSString stringWithFormat:
             @"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
             result[0], result[1], result[2], result[3],
@@ -312,7 +312,7 @@
 @implementation DKRequest (Logging)
 
 + (void)logData:(NSData *)data isOut:(BOOL)isOut isCached:(BOOL)isCached{
-  if ([DKManager requestLogEnabled]) {
+  if ([DKManager sharedInstance].requestLoggingEnabled) {
     if (data.length > 0) {
       NSData *logData = data;
       if (data.length > 1000) {
