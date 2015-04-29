@@ -47,6 +47,8 @@
 		A18D1B921AEF775C00996301 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A18D1B911AEF775C00996301 /* SystemConfiguration.framework */; };
 		A18D1B931AEF776700996301 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A18D1B8B1AEF771300996301 /* MobileCoreServices.framework */; };
 		A18D1B941AEF778700996301 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC830522150513A200D6AB1C /* UIKit.framework */; };
+		A1DC46E71AF0E082002BF262 /* NSString+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = A1DC46E51AF0E082002BF262 /* NSString+Additions.h */; };
+		A1DC46E81AF0E082002BF262 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = A1DC46E61AF0E082002BF262 /* NSString+Additions.m */; };
 		DC03846114F68EA1000DADD6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC03846014F68EA1000DADD6 /* Foundation.framework */; };
 		DC162311150BBA4900F12198 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC162310150BBA4900F12198 /* CoreGraphics.framework */; };
 		FFB5E4FD165ACFE800B0651C /* DeploydKit-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = FFB5E4DB165ACFE800B0651C /* DeploydKit-Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -114,6 +116,8 @@
 		A18D1B8D1AEF772000996301 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		A18D1B8F1AEF773400996301 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		A18D1B911AEF775C00996301 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		A1DC46E51AF0E082002BF262 /* NSString+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Additions.h"; sourceTree = "<group>"; };
+		A1DC46E61AF0E082002BF262 /* NSString+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Additions.m"; sourceTree = "<group>"; };
 		DC03845D14F68EA1000DADD6 /* libDeploydKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDeploydKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC03846014F68EA1000DADD6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DC162310150BBA4900F12198 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -263,6 +267,8 @@
 		FFB5E4EE165ACFE800B0651C /* DeploydKit-Private */ = {
 			isa = PBXGroup;
 			children = (
+				A1DC46E51AF0E082002BF262 /* NSString+Additions.h */,
+				A1DC46E61AF0E082002BF262 /* NSString+Additions.m */,
 				FFCEE8081691E37C00FA81A6 /* EGOCache.h */,
 				FFCEE8091691E37C00FA81A6 /* EGOCache.m */,
 				FFB5E4EF165ACFE800B0651C /* DKEntity-Private.h */,
@@ -324,6 +330,7 @@
 				A18D1B811AEF764600996301 /* AFURLSessionManager.h in Headers */,
 				FFB5E529165ACFE800B0651C /* NSURLConnection+Timeout.h in Headers */,
 				FFB5E518165ACFE800B0651C /* DKEntity-Private.h in Headers */,
+				A1DC46E71AF0E082002BF262 /* NSString+Additions.h in Headers */,
 				A18D1B7B1AEF764600996301 /* AFURLConnectionOperation.h in Headers */,
 				FFCEE80A1691E37C00FA81A6 /* EGOCache.h in Headers */,
 				A18D1B761AEF764600996301 /* AFNetworking.h in Headers */,
@@ -417,6 +424,7 @@
 				A18D1B711AEF764600996301 /* AFHTTPRequestOperation.m in Sources */,
 				FFB5E501165ACFE800B0651C /* DKEntity.m in Sources */,
 				FFB5E504165ACFE800B0651C /* DKFile.m in Sources */,
+				A1DC46E81AF0E082002BF262 /* NSString+Additions.m in Sources */,
 				FFB5E507165ACFE800B0651C /* DKManager.m in Sources */,
 				FFB5E50D165ACFE800B0651C /* DKNetworkActivity.m in Sources */,
 				A18D1B861AEF766800996301 /* AFNetworkActivityIndicatorManager.m in Sources */,

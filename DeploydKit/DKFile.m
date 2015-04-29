@@ -16,6 +16,7 @@
 #import "DKNetworkActivity.h"
 #import "NSURLConnection+Timeout.h"
 #import "EGOCache.h"
+#import "NSString+Additions.h"
 
 @interface DKFile ()
     @property (nonatomic, assign, readwrite) BOOL isVolatile;
@@ -258,6 +259,11 @@
   if (self.name.length > 0) {
     ep = [ep stringByAppendingPathComponent:self.name];
   }
+  
+  if (self.extraQueryParams && [self.extraQueryParams count] > 0) {
+      ep = [ep stringByAppendingQueryParams:self.extraQueryParams];
+  }
+    
   NSURL *URL = [NSURL URLWithString:ep];
     
     if ([DKManager sharedInstance].requestLoggingEnabled) {

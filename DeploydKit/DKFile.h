@@ -23,6 +23,11 @@
 @property (nonatomic, assign, readonly) BOOL isVolatile;
 
 /**
+ This dictionary are extra query parameters to pass on any request
+ */
+@property (nonatomic, strong, readwrite) NSDictionary *extraQueryParams;
+
+/**
  If 'YES' the file is currently loading (or saving), `NO` otherwise.
  */
 @property (nonatomic, assign, readonly) BOOL isLoading;
